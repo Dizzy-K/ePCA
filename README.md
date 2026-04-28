@@ -1,6 +1,6 @@
-# proof_safe_agent Artifact
+# ePCA Artifact
 
-This artifact packages the core idea behind `proof_safe_agent`: do not trust an LLM's surface-level alignment signal as the final safety decision. Instead, force the model to emit structured actions, bind those actions to an explicit semantic state, and let a small symbolic verifier decide whether the action is admissible.
+This artifact packages the core idea behind `executable Proof-Constrained Action`: do not trust an LLM's surface-level alignment signal as the final safety decision. Instead, force the model to emit structured actions, bind those actions to an explicit semantic state, and let a small symbolic verifier decide whether the action is admissible.
 
 ## Core Idea
 
