@@ -30,13 +30,13 @@ The `z3_epca` path is designed to close that gap. It makes the action explicit, 
 
 ## What Is Packaged
 
-- Dataset: [exp/benchmark_dataset_en.jsonl](/data/dizzylong/work/proof_safe_agent/github/exp/benchmark_dataset_en.jsonl)
-- Main benchmark results: [exp/res/eval_results_en.jsonl](/data/dizzylong/work/proof_safe_agent/github/exp/res/eval_results_en.jsonl)
+- Dataset: [exp/benchmark_dataset_en.jsonl](exp/benchmark_dataset_en.jsonl)
+- Main benchmark results: [exp/res/eval_results_en.jsonl](exp/res/eval_results_en.jsonl)
 - Paper-style reports:
-  [exp/res/benchmark_report_en.md](/data/dizzylong/work/proof_safe_agent/github/exp/res/benchmark_report_en.md)
-  [exp/res/benchmark_report_en_detailed.md](/data/dizzylong/work/proof_safe_agent/github/exp/res/benchmark_report_en_detailed.md)
+  [exp/res/benchmark_report_en.md](exp/res/benchmark_report_en.md)
+  [exp/res/benchmark_report_en_detailed.md](exp/res/benchmark_report_en_detailed.md)
 - Case trajectory log:
-  [case/logs/apt_trajectory_20260331T071314.130993Z.log](/data/dizzylong/work/proof_safe_agent/github/case/logs/apt_trajectory_20260331T071314.130993Z.log)
+  [case/logs/apt_trajectory_20260331T071314.130993Z.log](case/logs/apt_trajectory_20260331T071314.130993Z.log)
 
 ## Minimal Reproduction
 
@@ -85,4 +85,4 @@ python case/run_case.py --max-turns 16
 
 ## For Agentic Runners
 
-If you want a Codex- or Claude Code-oriented execution guide, use [Agent.md](/data/dizzylong/work/proof_safe_agent/github/Agent.md).
+If you want a Codex- or Claude Code-oriented execution guide, use [Agent_README.md](Agent_README.md).
