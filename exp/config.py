@@ -3,7 +3,6 @@ from __future__ import annotations
 import os
 from datetime import datetime, timezone
 
-HARDCODED_API_KEY = "sk-YZVMxNU62t2ZSKfj5dwdKqZGpDOwCC593bWNdlTGMpafXAXK"
 DEFAULT_BASE_URL = "https://api.bltcy.ai/v1"
 
 DEFAULT_ATTACKER_MODELS = [
@@ -71,7 +70,7 @@ DANGEROUS_CODE_KEYWORDS = (
 
 
 def env_api_key() -> str:
-    return os.getenv("OPENAI_API_KEY", HARDCODED_API_KEY)
+    return os.getenv("OPENAI_API_KEY", "")
 
 
 def env_base_url() -> str:

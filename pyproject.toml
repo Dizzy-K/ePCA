@@ -1,7 +1,7 @@
 [project]
 name = "proof-safe-agent-artifact"
 version = "0.1.0"
-description = "Packaged proof safe agent artifact for appendix reproduction."
+description = "Executable Proof-Constrained Actions research artifact and archived-result reproduction."
 readme = "README.md"
 requires-python = ">=3.11,<3.13"
 dependencies = [
@@ -10,6 +10,11 @@ dependencies = [
     "langchain-core==1.2.19",
     "pydantic==2.12.5",
     "openai==2.28.0",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.3.5",
 ]
 
 [tool.uv]

@@ -13,7 +13,7 @@ ROOT_DIR = Path(__file__).resolve().parents[1]
 if str(ROOT_DIR) not in sys.path:
     sys.path.insert(0, str(ROOT_DIR))
 
-from exp.config import DEFAULT_BASE_URL, HARDCODED_API_KEY, env_api_key, env_base_url
+from exp.config import DEFAULT_BASE_URL, env_api_key, env_base_url
 from exp.run_benchmark import (
     DEFAULT_MODELS,
     DEFAULT_GUARDRAILS,
@@ -43,7 +43,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--retry-timeouts", type=int, default=1)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
-    parser.add_argument("--api-key", type=str, default=env_api_key() or HARDCODED_API_KEY)
+    parser.add_argument("--api-key", type=str, default=env_api_key())
     parser.add_argument("--base-url", type=str, default=env_base_url() or DEFAULT_BASE_URL)
     return parser.parse_args()
 

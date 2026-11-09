@@ -1,0 +1,8 @@
+{
+  "localization_pairs": 1137,
+  "mutation_rows": 138,
+  "portability_rows": 20,
+  "report": "reports/supplemental_v2/supplemental_architectural_experiments.md",
+  "scaling_rows": 64,
+  "traces": 640
+}

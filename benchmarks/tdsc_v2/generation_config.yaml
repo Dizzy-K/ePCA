@@ -1,0 +1,7 @@
+dataset_version: tdsc-v2
+generator_version: phase2-generator-v2-cumulative-approval
+generation_seed: 20260811
+base_trace_count: 600
+cumulative_approval_attack_traces: 20
+cumulative_approval_benign_traces: 20
+remote_api: false

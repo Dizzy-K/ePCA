@@ -1,0 +1,6 @@
+{"accepted":false,"actual_action_digest":"e2fa4f397b05909fdec97f48b82c326e59efec808472bed0e4a53b85d9d11eb2","case":"action_mutation","certificate_action_digest":"7326d557cfc975119bfa0cd25e5bbee429368578843e24035d33db1f39109e27","environment":"financial","reason":"action_binding_mismatch"}
+{"accepted":false,"actual_state_version":1,"case":"state_mutation","certificate_state_version":0,"environment":"financial","reason":"stale_certificate"}
+{"accepted":false,"actual_action_digest":"7dab5314c626c1ead2e14fd28cdc50d5962a920eaf507159c018cf3210ec879a","case":"action_mutation","certificate_action_digest":"b1699a577b72d41028718d719942a9e6ad6f8133356fb819daef1a378c5d3d54","environment":"dataflow","reason":"action_binding_mismatch"}
+{"accepted":false,"actual_state_version":1,"case":"state_mutation","certificate_state_version":0,"environment":"dataflow","reason":"stale_certificate"}
+{"accepted":false,"actual_action_digest":"95c39ba79b7889839e19fe89ce0b609aa837e166cc7009803086818367031985","case":"action_mutation","certificate_action_digest":"9a80af5575160d5c3ba955ff90bd64c552b779d591661b82eb335a8940027e49","environment":"cloud_iam","reason":"action_binding_mismatch"}
+{"accepted":false,"actual_state_version":1,"case":"state_mutation","certificate_state_version":0,"environment":"cloud_iam","reason":"stale_certificate"}

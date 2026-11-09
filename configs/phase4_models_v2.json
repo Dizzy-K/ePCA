@@ -1,0 +1,19 @@
+{
+  "experiment_date": "2026-08-27",
+  "temperature": 0.01,
+  "actor_max_tokens": 8192,
+  "judge_max_tokens": 8192,
+  "certificate_max_tokens": 8192,
+  "max_turns": 12,
+  "repeats": 3,
+  "timeout_seconds": 120,
+  "max_retries": 2,
+  "concurrency": 2,
+  "financial_policy_version": "financial-policy-v2",
+  "models": [
+    {"provider": "openai", "model": "gpt-5.5", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_GPT_API_KEY", "concurrency": 1},
+    {"provider": "deepseek", "model": "deepseek-v4-pro", "transport": "openai-compatible", "base_url": "https://api.deepseek.com/v1", "credential_env": "PHASE4_DEEPSEEK_API_KEY", "concurrency": 2, "thinking": false},
+    {"provider": "minimax", "model": "k3", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_MMX_API_KEY", "concurrency": 1}
+  ],
+  "judge": {"provider": "minimax", "model": "k3", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_MMX_API_KEY", "concurrency": 1}
+}

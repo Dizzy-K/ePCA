@@ -1,91 +1,28 @@
-# Open Science
+# Open science and evidence scope
 
-This packaged artifact corresponds to the `proof_safe_agent` pipeline. The recommended reproduction path is:
+This release aligns code and existing evidence with the 2026-11-09 manuscript. Publishing the artifact adds no research runs. Local tests and offline aggregation are release checks, not additional experimental observations.
 
-- `exp/generate_micro_bench.py`
-- `exp/preflight_benchmark.py`
-- `exp/run_benchmark.py`
-- `exp/analyze_benchmark.py`
+## Available evidence
 
-The benchmark evaluates three guardrails, `abac`, `llm_judge`, and `z3_epca`, over three task families, `Attack_Split`, `Attack_Meta`, and `Benign_Utility`.
+Included: runtime/policy/oracle source, tests, benchmark inputs, recorded results, and offline reproduction commands. `release_manifest.json` identifies the published bytes. The corresponding English manuscript PDF has SHA-256 `606aee125c5db67aad7329269e0ed1a79af104137cd34d5d66dc3d6e1be3463e`; the PDF is not included in this update.
 
-## Hardware
+The adaptive analysis uses 720 included, complete API-valid records, not a full census of all historical attempts, failures, or retries. The certificate archive has 1,080 records; the manuscript uses 720 from GPT-5.5 and DeepSeek-v4-pro and excludes 360 k3 records. Eight safe and eleven unsafe semantic tuples underlie the repeated calls.
 
-- A modern x86_64 Linux server is sufficient.
-- The benchmark path does not require local GPU inference because the evaluated frontier models are accessed through an OpenAI-compatible API.
-- Stable network access to the configured model endpoint is the key runtime dependency.
+The earlier policy-gap cohort remains unchanged in `results/phase4/`. Its ePCA 2/107 and StatefulRuleMonitor 1/105 oracle-unsafe outcomes have zero encoded-policy violations. It is not pooled with the cumulative-approval cohort. Historical raw timestamps and model identifiers are retained as recorded.
 
-## Software
+## Interpretation
 
-- Python 3.11
-- `z3-solver==4.16.0.0`
-- `langchain-openai==1.1.11`
-- `langchain-core==1.2.19`
-- `pydantic==2.12.5`
-- `openai==2.28.0`
+- The theorem concerns encoded-policy preservation under trusted-state, contract, runtime, and encoding assumptions.
+- An intact StatefulRuleMonitor implements the same policy as an ideal reference. The certificate study concerns inconsistent model-generated evidence in a structured task, not classical PCC in general.
+- Deletion witnesses cover 10 of 23 rules. Both representations share state and contracts; common-mode omissions remain a failure mode. The study does not estimate real-world defect frequencies.
+- Simulated sanitization records a trusted resource effect; it is not an evaluated text-redaction system or real external-service deployment.
+- Timing values are archived measurements. The original host/dependency inventory is incomplete; installing the listed dependencies does not recreate that host.
+- Bounded episodes and fixed templates do not establish unrestricted attack coverage or deployment zero risk.
 
-Install with:
+## Reproduction layers
 
-```bash
-pip install -r requirements.txt
-```
+1. Archived-result reproduction: standard-library analysis, no network or environment execution.
+2. Software validation: local tests and optional recorded-pair replay, no remote model calls.
+3. Fresh experiments: explicit optional commands, new output directories, and user-supplied credentials; outside this release check.
 
-Or with:
-
-```bash
-uv sync
-```
-
-The runtime expects OpenAI-compatible credentials and endpoint settings configured through:
-
-```bash
-export OPENAI_API_KEY=...
-export OPENAI_BASE_URL=...
-```
-
-## Dataset
-
-- `exp/benchmark_dataset_en.jsonl`
-- 90 total tasks
-- 30 `Attack_Split`
-- 30 `Attack_Meta`
-- 30 `Benign_Utility`
-
-## Workflow
-
-### Case Demo
-
-```bash
-python case/run_case.py --max-turns 16
-```
-
-The live case runner uses the bundled API defaults unless you override them through environment variables.
-
-### Full Reproduction
-
-```bash
-python generate_micro_bench.py \
-  --language en-US \
-  --output exp/benchmark_dataset_en.jsonl \
-  --per-category 30 \
-  --overwrite
-
-python exp/preflight_benchmark.py \
-  --dataset exp/benchmark_dataset_en.jsonl \
-  --output exp/res/preflight_results_en.json \
-  --models Qwen3-max,Gemini-3-flash-preview,Kimi-k2.5,GPT-5.4-2026-03-05 \
-  --guardrails abac,z3_epca,llm_judge
-
-python exp/preflight_benchmark.py \
-  --dataset exp/benchmark_dataset_en.jsonl \
-  --output exp/res/eval_results_en.jsonl \
-  --models Qwen3-max,Gemini-3-flash-preview,Kimi-k2.5,GPT-5.4-2026-03-05 \
-  --guardrails abac,z3_epca,llm_judge \
-  --overwrite \
-  --concurrency 3 \
-  --timeout-seconds 12
-
-python exp/analyze_benchmark.py \
-  --input exp/res/eval_results_en.jsonl \
-  --output exp/res/benchmark_report_en.md
-```
+Do not commit credentials, private keys, local tunnel configuration, or .env files. The legacy API artifact is separate from the current reproduction entry point.

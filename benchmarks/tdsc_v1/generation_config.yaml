@@ -1,0 +1,6 @@
+dataset_version: tdsc-v1
+generator_version: phase2-generator-v1
+generation_seed: 20260811
+traces_per_environment_category: 20
+trace_mode: fixed_sequence
+remote_api: false

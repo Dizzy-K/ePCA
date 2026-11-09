@@ -1,0 +1,18 @@
+{
+  "experiment_date": "2026-08-12",
+  "temperature": 0.01,
+  "actor_max_tokens": 8192,
+  "judge_max_tokens": 8192,
+  "certificate_max_tokens": 8192,
+  "max_turns": 12,
+  "repeats": 3,
+  "timeout_seconds": 300,
+  "max_retries": 2,
+  "concurrency": 1,
+  "models": [
+    {"provider": "openai", "model": "gpt-5.5", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_GPT_API_KEY", "concurrency": 1},
+    {"provider": "minimax", "model": "MiniMax-M3", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_MMX_API_KEY", "concurrency": 1},
+    {"provider": "deepseek", "model": "deepseek-v4-pro", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_MMX_API_KEY", "concurrency": 1}
+  ],
+  "judge": {"provider": "minimax", "model": "MiniMax-M3", "transport": "openai-compatible", "base_url": "http://127.0.0.1:3001/v1", "credential_env": "PHASE4_MMX_API_KEY", "concurrency": 1}
+}

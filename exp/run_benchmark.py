@@ -23,7 +23,6 @@ if str(ROOT_DIR) not in sys.path:
 from exp.attacker_agent import build_attacker_prompt, parse_attacker_payload
 from exp.config import (
     DEFAULT_BASE_URL,
-    HARDCODED_API_KEY,
     canonical_model_name,
     canonical_task_category,
     env_api_key,
@@ -236,7 +235,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument("--timeout-seconds", type=float, default=30.0)
     parser.add_argument("--resume", action="store_true")
     parser.add_argument("--overwrite", action="store_true")
-    parser.add_argument("--api-key", type=str, default=env_api_key() or HARDCODED_API_KEY)
+    parser.add_argument("--api-key", type=str, default=env_api_key())
     parser.add_argument("--base-url", type=str, default=env_base_url() or DEFAULT_BASE_URL)
     return parser.parse_args()
 

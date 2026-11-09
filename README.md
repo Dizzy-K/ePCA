@@ -1,88 +1,63 @@
-# ePCA Artifact
+# Executable Proof-Constrained Actions (ePCA)
 
-This artifact packages the core idea behind `executable Proof-Constrained Action`: do not trust an LLM's surface-level alignment signal as the final safety decision. Instead, force the model to emit structured actions, bind those actions to an explicit semantic state, and let a small symbolic verifier decide whether the action is admissible.
+Research artifact for **Executable Proof-Constrained Actions: Axiom-Bound Guardrails for LLM Agents**, aligned with the 2026-11-09 manuscript revision.
 
-## Core Idea
+ePCA derives a concrete transition obligation from trusted state and a registered deterministic tool contract. Executable predicates and separately encoded SMT constraints check it; a bound executor connects authorization to the action, state, successor, and active configuration at commit. The prototype covers financial, dataflow, and cloud-IAM simulators.
 
-The artifact compares three guardrail styles over the same budget-disbursement benchmark:
+## Reproduce reported numbers offline
 
-- `abac`: direct rule checks over a small hand-written policy surface.
-- `llm_judge`: ask another model to decide whether the action is safe.
-- `z3_epca`: compile the intended policy into symbolic constraints, bind runtime fields to typed variables, and verify the action with Z3.
-
-The point is not that symbolic methods replace language models. The point is that the final authorization step should sit in a narrow, inspectable, deterministic trusted computing base. The LLM can still plan, translate, and propose actions, but the permission boundary is enforced by semantics rather than by prompt wording alone.
-
-## Why This Matters
-
-Prompt-level refusals and natural-language judges are both brittle in different ways:
-
-- A model may refuse a benign action for irrelevant alignment reasons.
-- A model may approve a harmful action after being steered through a multi-turn policy rewrite or role reframing.
-- A naive rule checker may miss invariant violations that only become obvious after the action is bound to the full runtime state.
-
-The `z3_epca` path is designed to close that gap. It makes the action explicit, binds JSON fields to a typed symbolic world, and produces either `sat` or `unsat` with an inspectable unsat core.
-
-## Repository Layout
-
-- `exp/`: the benchmark pipeline. This is the main artifact path used by the appendix.
-- `case/`: a packaged enterprise network exfiltration case study showing the same "LLM proposes, verifier decides" pattern in a different setting.
-- `ast_nodes.py`, `lexer.py`, `parser.py`, `smt_compiler.py`: the semantic frontend and symbolic compiler used by the benchmark verifier.
-
-## What Is Packaged
-
-- Dataset: [exp/benchmark_dataset_en.jsonl](exp/benchmark_dataset_en.jsonl)
-- Main benchmark results: [exp/res/eval_results_en.jsonl](exp/res/eval_results_en.jsonl)
-- Paper-style reports:
-  [exp/res/benchmark_report_en.md](exp/res/benchmark_report_en.md)
-  [exp/res/benchmark_report_en_detailed.md](exp/res/benchmark_report_en_detailed.md)
-- Case trajectory log:
-  [case/logs/apt_trajectory_20260331T071314.130993Z.log](case/logs/apt_trajectory_20260331T071314.130993Z.log)
-
-## Minimal Reproduction
-
-Install dependencies:
+With Python 3.11 or 3.12, the following uses only the standard library, reads archived results, and makes **no model/API calls**:
 
 ```bash
-pip install -r requirements.txt
+python scripts/verify_release.py
+python scripts/reproduce_paper.py --output-dir build/reproduction
 ```
 
-Set an OpenAI-compatible endpoint:
+It generates JSON/Markdown summaries, checks the main reported counts, and regenerates deterministic/PCC tables. It does not execute benchmark environments or recreate historical timing. See [REPRODUCIBILITY.md](REPRODUCIBILITY.md).
+
+## Evidence in this release
+
+| Evaluation | Archived evidence | Finding |
+| --- | --- | --- |
+| Deterministic | 640 traces: 500 adversarial, 140 benign | Full-policy stateful mechanisms agree on evaluated inputs |
+| Adaptive | 720 complete API-valid episodes, two models, four guardrails | ePCA and StatefulRuleMonitor each have UEMR 0/108 and BTCR 72/72 |
+| Fixed-action certificates | 180 safe and 180 unsafe calls per model | Safe acceptance: GPT-5.5 PCC 148/180; DeepSeek-v4-pro PCC 144/180; ePCA 180/180 each |
+| Same-state/action comparison | 863 unique pairs, 3,966 occurrences | Zero StatefulRuleMonitor/ePCA disagreements |
+| Rule omissions | 10 of 23 rules have sole-violation witnesses | A retained check blocks tested one-sided omissions; common-mode deletions can admit violations |
+
+Certificate calls reduce to **eight safe and eleven unsafe semantic tuples** after removing session identifiers. Calls are repeated instances, not independent semantic tasks. The certificate archive also contains k3 records, explicitly excluded from the current two-model manuscript.
+
+StatefulRuleMonitor is the ideal complete implementation of the **specified policy**, under accurate state and contracts. The preservation result concerns encoded invariants under trusted-runtime and faithful-encoding assumptions. Sanitization is a trusted resource-specific state effect in the simulator. See [OPEN_SCIENCE.md](OPEN_SCIENCE.md).
+
+## Local tests
 
 ```bash
-export OPENAI_API_KEY=...
-export OPENAI_BASE_URL=...
+python -m venv .venv
+.venv/bin/python -m pip install -r requirements.txt -r requirements-dev.txt
+PYTHONPATH=. .venv/bin/python -m pytest -q
 ```
 
-Regenerate the English dataset if needed:
+Tests use deterministic local runtimes and mocked model clients; no API key is required. Release validation is separate from archived research measurements.
 
-```bash
-python generate_micro_bench.py --language en-US --output exp/benchmark_dataset_en.jsonl --per-category 30 --overwrite
-```
+## Repository map
 
-Run the benchmark:
+- `epca/`: typed actions, contracts, policies, SMT verifier, and bound executor.
+- `evaluation/oracles/`: independent reference transitions and outcome checks.
+- `pcc/`: structured action certificates, producer, and independent checker.
+- `benchmark/`, `phase3/`, `phase4/`, `phase5/`: benchmark and analysis code.
+- `benchmarks/tdsc_v2/`: the paper's 640-trace cumulative-approval dataset.
+- `results/phase2_v2/`, `results/phase3_v2/`: deterministic comparisons.
+- `results/phase4_v2_canonical3/`: included 720-episode adaptive cohort.
+- `results/phase4_v2_pcc_canonical/`: model-certificate archive.
+- `results/supplemental_v2/`: existing omission, localization, and cost records. The historical name does not imply a manuscript supplement.
+- `reports/current/`: archived same-state/action analysis.
+- `results/phase4/`, `reports/phase4_failure_localization*`: earlier policy-gap cohort, kept separate.
+- `release_manifest.json`: hashes and sizes for the published files.
 
-```bash
-python run_benchmark.py --dataset exp/benchmark_dataset_en.jsonl --output exp/res/eval_results_en.jsonl --guardrails abac,llm_judge,z3_epca --overwrite --concurrency 3 --timeout-seconds 12
-```
+Directory names containing v1/v2 are historical dataset/policy identifiers, not alternative manuscript contributions.
 
-Generate the summary report:
+## Optional fresh runs and legacy artifact
 
-```bash
-python analyze_benchmark.py --input exp/res/eval_results_en.jsonl --output exp/res/benchmark_report_en.md
-```
+Fresh remote experiments require credentials and incur API costs. They are not part of the offline reproduction above. Historical configuration files contain endpoint settings and credential environment-variable names, not keys. See [REPRODUCIBILITY.md](REPRODUCIBILITY.md) before a live run.
 
-If you only want to inspect the artifact, the packaged dataset and reports are already included, so no live API run is required.
-
-## Case Study
-
-The packaged `case/` directory is a smaller interactive demonstration of the same design philosophy. An LLM tries to achieve a network exfiltration goal by calling tools, but every action is checked by a formal guardrail before execution.
-
-Run it with:
-
-```bash
-python case/run_case.py --max-turns 16
-```
-
-## For Agentic Runners
-
-If you want a Codex- or Claude Code-oriented execution guide, use [Agent_README.md](Agent_README.md).
+`exp/`, `case/`, and the root parser/compiler and benchmark wrappers are the earlier artifact. They are preserved, but their original results are not the current paper's main evaluation. Manuscript PDFs, private reviews, API recovery logs, and local credentials are not included in this update.
